@@ -1,0 +1,7 @@
+plant_scale,employees,case,d_oem_days,d_plc_days,downtime_avoided_days,downtime_reduction_pct,cost_per_hour_usd,exposure_avoided_usd
+Small,10–49,Fast replacement (3-day),14,3,11,78.6,10000,2640000
+Small,10–49,Slow replacement (7-day),14,7,7,50.0,10000,1680000
+Medium,50–249,Fast replacement (3-day),14,3,11,78.6,50000,13200000
+Medium,50–249,Slow replacement (7-day),14,7,7,50.0,50000,8400000
+Large,250+,Fast replacement (3-day),14,3,11,78.6,200000,52800000
+Large,250+,Slow replacement (7-day),14,7,7,50.0,200000,33600000
