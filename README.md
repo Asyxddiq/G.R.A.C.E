@@ -1,114 +1,95 @@
-# G.R.A.C.E.
+# G.R.A.C.E. (Engineering Consulting Project)
+Developed with PLC Automation as industry partner.
 
-### Measuring Sustainable Asset Lifecycle Value
+### Overview:
+This project is a consulting framework designed to help PLC Automation, a supplier of obsolete and hard-to-find PLC spare parts, measure and communicate the value it creates for clients. We moved the company's value proposition from implied benefits to quantified impact.
 
-> **Project type:** Engineering consulting · Industrial automation · Downtime and cost-impact modelling
-> **Industry partner:** PLC Automation (industrial automation and obsolete PLC spare-parts supplier)
-> **My role:** Team Leader; Cost Quantification & Modelling Lead
-> **Team:** Team 1 (5 members): Min Xi, Jia Qi, Shrujan, Asyhiddiq, Guru
-> **Status:** Completed academic consulting project
+Instead of describing services ("we source obsolete parts"), the framework uses five measurable pillars, **G**ratification, **R**ecycling, **A**ccountability, **C**ost & downtime savings and **E**xperience, to show outcomes. At its core is a transparent, scenario-based model that converts *days of downtime avoided* into *financial exposure avoided* for clients of different plant sizes.
 
-A consulting framework that helps an industrial spare-parts supplier **measure and communicate** the sustainability and financial value of extending equipment life, instead of leaving that value implied. The core of the project is a transparent, scenario-based model that turns *days of downtime avoided* into *financial exposure avoided*.
-
----
-
-## 1. Context
-
-When a programmable logic controller (PLC) or control component fails or becomes obsolete, a plant usually has two options:
-
-| | Full OEM replacement | Spare-part replacement (PLC Automation) |
-|---|---|---|
-| Scope | Replace the whole machine or system | Replace the specific failed part |
-| Modelled downtime | 14 days, full plant shutdown | 1–7 days, often a system-specific shutdown* |
-| Restart | Full plant restart | Partial restart* |
-| Waste | Whole machine retired | Machine life extended, less waste |
-
-\*Whether a partial shutdown is possible depends on the plant's architecture, redundancy and safety isolation. See [assumptions](docs/assumptions-and-limitations.md).
-
-PLC Automation already creates this value for clients (faster delivery, extended asset life, less waste, a circular-economy model), **but it had no systematic way to quantify it or present it credibly** to customers and stakeholders. Operational data was also split across several spreadsheets.
-
-## 2. Problem Statement
-
+### Problem Statement:
 > *How might PLC Automation systematically capture and quantify the sustainability impact of its asset life-extension and component reuse practices, and communicate this value credibly to customers and stakeholders, without disrupting its fast-paced, demand-driven supply chain operations?*
 
-## 3. The G.R.A.C.E. Framework
+### Approach: Why replacing the part beats replacing the machine
+When a PLC or control component fails or becomes obsolete, a plant can either replace the entire system through the OEM or replace only the failed part. We framed the comparison around three specific problems:
 
-Five pillars of measurable indicators. Full detail in [`docs/grace-framework.md`](docs/grace-framework.md).
+<img width="1280" alt="Downtime comparison" src="visuals/downtime-comparison.png" />
 
+| The Problem (Full OEM Replacement) | The Solution (PLC Spare-Part Replacement) |
+| :--- | :--- |
+| **Long Downtime:** Replacing the whole system is modelled at **14 days** of full plant shutdown. | **Targeted Repair:** Only the failed component is replaced, modelled at **1–7 days**, often with a system-specific (partial) shutdown.* |
+| **Full Restart & Higher Risk:** The whole plant must restart, increasing operational risk. | **Partial Restart:** Only the affected system restarts, lowering operational risk.* |
+| **Unquantified Value:** PLC Automation's impact sat across fragmented spreadsheets and was never measured or shown to clients. | **G.R.A.C.E. Metrics:** A single master sheet and a cost model turn each order into measurable time and cost savings that can be reported. |
+
+*\*Partial shutdown depends on plant architecture, redundancy and safety isolation. See [assumptions](docs/assumptions-and-limitations.md).*
+
+### The G.R.A.C.E. Framework
 | Pillar | What it measures | Example metrics |
-|---|---|---|
-| **G**ratification | Client and employee trust and satisfaction | Customer / employee satisfaction %, repeat purchase rate |
-| **R**ecycling | Material recovery and waste avoided | Recovery rate (% of parts salvaged instead of discarded) |
-| **A**ccountability | Product quality and responsiveness | Warranty claim rate, improvement rate, complaint resolution rate |
-| **C**ost & downtime savings | Time and money clients avoid losing | Downtime avoided (days/hours), exposure avoided ($) |
-| **E**xperience | How the impact is communicated | Website impact dashboard, downloadable reports, social media |
+| :--- | :--- | :--- |
+| **Gratification** | Client and employee trust and satisfaction | Customer / employee satisfaction %, repeat purchase rate |
+| **Recycling** | Material recovery and waste avoided | Recovery rate (% of parts salvaged instead of discarded) |
+| **Accountability** | Product quality and responsiveness | Warranty claim rate, improvement rate, complaint resolution rate |
+| **Cost & Downtime Savings** | Time and money clients avoid losing | Downtime avoided (days / hours), exposure avoided ($) |
+| **Experience** | How the impact is communicated | Website impact dashboard, downloadable reports, social media |
 
-## 4. Cost & Downtime Model (my main contribution)
+Full detail: [docs/grace-framework.md](docs/grace-framework.md)
 
-Full derivation in [`docs/methodology.md`](docs/methodology.md). Runnable model: [`analysis/scenario_model.py`](analysis/scenario_model.py).
-
-**Formulas**
-
+### Cost Conversion Model (My Lead Contribution)
 ```
-ΔD           = D_OEM − D_PLC                 # downtime avoided (days)
-D_reduction  = ΔD / D_OEM × 100%             # downtime reduction (%)
-C_savings    = ΔD × C_day                    # exposure avoided ($)
-C_day        = cost of breakdown per hour × 24
+ΔD           = D_OEM − D_PLC                  # downtime avoided (days)
+D_reduction  = ΔD / D_OEM × 100%              # downtime reduction (%)
+C_savings    = ΔD × C_day                     # exposure avoided ($)
+C_day        = breakdown cost per hour × 24
 ```
+- **D_OEM** = 14 days (fixed reference)
+- **D_PLC** = 3 days (fast case) and 7 days (slow case)
+- **Breakdown cost per hour** = lower end of each plant-size range (Small $10k, Medium $50k, Large $200k), to stay conservative
 
-**Inputs**: D_OEM = 14 days (fixed reference); D_PLC = 3 days (fast case) and 7 days (slow case); breakdown cost per hour set at the **lower end** of each plant-size range, to stay conservative.
+Full derivation and worked examples: [docs/methodology.md](docs/methodology.md)
 
-![Downtime comparison](visuals/downtime-comparison.png)
+### Tools & Methods
+- Modelling: formula-based scenario analysis (downtime avoided → financial exposure avoided)
+- Data: centralised "downtime master sheet" design (Excel) linking parts → customers → time saved → cost saved
+- Reproduction: Python + Matplotlib ([analysis/scenario_model.py](analysis/scenario_model.py))
+- Communication: website dashboard redesign, downloadable impact report and social-media concepts
 
-**Results (per incident, illustrative)**
+### Result & Validation:
+In the modelled cases, spare-part replacement reduces downtime by **50–79% per incident**. Because the model is linear, exposure avoided grows in direct proportion to plant scale and days avoided.
 
-| Plant scale | Breakdown cost used | Fast case (3 days) ΔD = 11 d, −78.6% | Slow case (7 days) ΔD = 7 d, −50% |
-|---|---|---|---|
+| Plant Scale | Breakdown Cost Used | Fast Case (3 days)<br>ΔD = 11 days, −78.6% | Slow Case (7 days)<br>ΔD = 7 days, −50% |
+| :--- | :--- | :--- | :--- |
 | Small (10–49 staff) | $10,000 / hr | **$2.64M** | **$1.68M** |
 | Medium (50–249 staff) | $50,000 / hr | **$13.2M** | **$8.4M** |
 | Large (250+ staff) | $200,000 / hr | **$52.8M** | **$33.6M** |
 
-![Exposure avoided by plant scale](visuals/exposure-by-plant-scale.png)
+<img width="1280" alt="Exposure avoided by plant scale" src="visuals/exposure-by-plant-scale.png" />
 
-**Takeaway:** in the modelled cases, spare-part replacement cuts downtime by **50–79% per incident**. Because the model is linear, exposure avoided grows in proportion to plant scale and to days avoided. At large scale, shorter downtime acts as capital protection, not just an efficiency gain.
+For a large plant, the gap between the fast and slow cases alone is **$19.2M per incident**. At that scale, shorter downtime is capital protection, not just operational efficiency.
 
-> ⚠️ These are **modelled exposure-avoided estimates, not realised savings**. See [`docs/assumptions-and-limitations.md`](docs/assumptions-and-limitations.md).
+To keep the model easy to check, every figure can be reproduced from the stated assumptions with `python analysis/scenario_model.py`. These are **modelled exposure-avoided estimates, not realised savings**. See [docs/assumptions-and-limitations.md](docs/assumptions-and-limitations.md).
 
-### From model to operations: the downtime master sheet
-
-To move from illustrative scenarios to real figures, we proposed one **centralised master spreadsheet** to replace the fragmented ones:
-
-1. Tag each part sold with an **impact level** (high-value parts are visible at a glance).
-2. Record **time saved (hours)** per part per customer, and average it by industry.
-3. Roll up time saved **per customer and per period** (monthly, quarterly, yearly).
-4. Multiply by each customer's **industry-specific downtime cost** to get attributed cost savings. *Example: a part that saves a client 150 hours at $100,000/hr ≈ $15M of downtime exposure avoided.*
-
-## 5. Communicating Impact (Experience)
-
-- **Website:** shift from service descriptions to an outcome-led homepage with quantified impact tiles (% downtime reduction, exposure avoided, average recovery days, machines supported).
-- **Reports:** a downloadable "Operational Impact Summary" / sustainability report with downtime, cost and recovery breakdowns. It can be printed as a client pamphlet.
-- **Social media:** short, visual posts of impact metrics to build credibility through regular, transparent updates.
-
-## 6. Implementation Roadmap
-
+### Implementation Roadmap
 | Phase | Timing | What happens |
-|---|---|---|
-| 1. ESG data collection (pilot) | First 2 weeks | Pilot on ~4 client datasets; calculate downtime and cost savings in Excel |
-| 2. Data capture SOP | Next 2 weeks | Standardise capture; integrate ESG metrics into the website dashboard |
-| 3. Larger-scale implementation | Next 4 weeks | Expand to ~10 client datasets; compute mean/median savings; find gaps |
-| 4. Full rollout | Thereafter | All clients captured; collate ESG data every 2 weeks; update dashboard monthly |
+| :--- | :--- | :--- |
+| **1. ESG Data Collection (Pilot)** | First 2 weeks | Pilot on ~4 client datasets; calculate downtime and cost savings in Excel |
+| **2. Data Capture SOP** | Next 2 weeks | Standardise capture; integrate ESG metrics into the website dashboard |
+| **3. Larger-Scale Implementation** | Next 4 weeks | Expand to ~10 client datasets; compute mean / median savings; find gaps |
+| **4. Full Rollout** | Thereafter | All clients captured; collate data every 2 weeks; update dashboard monthly |
 
-## 7. My Role
+### My Role
+**Team Leader; Cost Quantification & Modelling Lead** (Team 1: Min Xi, Jia Qi, Shrujan, Asyhiddiq, Guru)
+- Coordinated the project's direction and shaped how the service's value was framed for stakeholders.
+- Built the calculation logic linking downtime avoided to financial exposure avoided (ΔD, D_reduction, C_savings).
+- Structured the small, medium and large plant scenarios and the fast vs slow replacement cases.
+- Turned the calculations into presentation-ready charts and impact statements, with explicit assumptions for a non-technical audience.
 
-As **team leader**, I coordinated the project's direction and shaped how the service's value would be framed for stakeholders. As **cost quantification and modelling lead**, I:
+### Future Recommendation
+To turn this framework from illustrative scenarios into a production reporting tool, the following upgrades are recommended:
+1. **Validation with Real Client Data:** Run the Phase 1 pilot on actual order and downtime records so plant-specific costs replace benchmark ranges, and report results as measured savings rather than modelled exposure.
+2. **Nonlinear Cost Modelling:** Extend the constant cost-per-hour model to account for shift patterns (non-24/7 plants), restart losses, expedited logistics, scrap and contractual penalties, and recoverable production.
+3. **Engineering Sign-off on Shutdown Scope:** Confirm with engineers, case by case, when a spare-part replacement allows a partial rather than full shutdown, so the downtime assumptions stay defensible.
+4. **Automated Impact Dashboard:** Connect the master sheet directly to the website dashboard and client reports so metrics update automatically on the collation schedule instead of by hand.
 
-- built the calculation logic linking downtime avoided to financial exposure avoided (ΔD, D_reduction, C_savings);
-- structured the small-, medium- and large-plant scenarios and the fast vs slow replacement cases;
-- turned the calculations into presentation-ready charts and impact statements;
-- made the assumptions explicit so the conclusions stay defensible for a non-technical audience.
-
-## 8. Repository Structure
-
+### Repository Structure
 ```text
 G.R.A.C.E/
 ├── README.md
@@ -124,17 +105,4 @@ G.R.A.C.E/
     └── exposure-by-plant-scale.png
 ```
 
-Reproduce the results:
-
-```bash
-pip install matplotlib
-python analysis/scenario_model.py
-```
-
-## 9. Disclaimer
-
-This was an academic consulting exercise. All financial figures are illustrative scenario outputs based on stated assumptions. They are not verified client savings, and they are not an endorsement by or official statement from PLC Automation. Client names and internal data have been left out.
-
----
-
-**Topics:** `industrial-automation` · `engineering-consulting` · `downtime-analysis` · `cost-modelling` · `scenario-analysis` · `esg` · `sustainability` · `circular-economy`
+*Academic consulting project. All financial figures are illustrative scenario outputs and not an official statement by PLC Automation.*
